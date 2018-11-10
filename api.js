@@ -1,5 +1,10 @@
 const puppeteer = require('puppeteer');
 
+const typeValue = async (selector, value, page) => {
+  await page.focus(selector);
+  await page.keyboard.type(value);
+};
+
 const addPlayer = async (player, page) => {
   const {
     name,
@@ -7,14 +12,13 @@ const addPlayer = async (player, page) => {
     order,
     email,
   } = player;
-
   const combinedName = alias ? `${alias} (${name})` : name;
 
-  await page.click(`#Foundation_Elemental_5_PlayerInfo_${order}> input`);
-  await page.evaluate((playerName, playerEmail, playerOrder) => {
-    document.querySelector(`#Foundation_Elemental_5_PlayerTitle_${playerOrder}`).value = playerName;
-    document.querySelector(`#Foundation_Elemental_5_PlayerId_${playerOrder}`).value = playerEmail;
-  }, combinedName, email, order);
+  await page.click(`#Foundation_Elemental_5_PlayerInfo_${order - 1} input`);
+  await page.waitForSelector(`#Foundation_Elemental_5_PlayerTitle_${order - 1}`, { visible: true });
+
+  await typeValue(`#Foundation_Elemental_5_PlayerTitle_${order - 1}`, combinedName, page);
+  await typeValue(`#Foundation_Elemental_5_PlayerId_${order - 1}`, email, page);
 };
 
 const startGame = async (params) => {
@@ -26,7 +30,7 @@ const startGame = async (params) => {
   try {
     const page = await browser.newPage();
     await page.goto(startGameUrl);
-    await page.waitForSelector('#Foundation_Elemental_5_ReadyToPlayButton');
+    await page.waitForSelector('#Foundation_Elemental_5_GameTitle');
 
     if (title) {
       await page.$eval('#Foundation_Elemental_5_GameTitle', (element, gameTitle) => {
@@ -34,13 +38,13 @@ const startGame = async (params) => {
       }, title);
     }
 
-    await page.click(`input[name="Foundation_Elemental_5_numPlayers"][value="${numPlayers}"]`);
-    players.forEach(async player => addPlayer(player, page));
+    await page.click(`input[name^="Foundation_Elemental_5_numPlayers"][value="${numPlayers}"]`);
+
+    for (const player of players) await addPlayer(player, page);
 
     await page.click('#Foundation_Elemental_5_PlayButton');
-    await page.waitForNavigation();
-    await page.waitForSelector('#Foundation_Elemental_8_centerOverPiece');
-
+    await page.waitForSelector('#Foundation_Elemental_8_refreshGame');
+    await page.screenshot({ path: './test2.png' });
     url = page.url();
   } finally {
     await browser.close();
