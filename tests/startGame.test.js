@@ -1,9 +1,8 @@
 const api = require('../api.js');
 
-(async () => {
-  await api.startGame({
-    title: 'My test game',
-    numPlayers: 2,
+test('Verify that 2 player game is created', async () => {
+  const response = await api.startGame({
+    title: 'Test Game',
     players: [
       {
         name: 'Andy',
@@ -18,6 +17,7 @@ const api = require('../api.js');
       },
     ],
   });
-})();
 
-
+  expect(response.success).toBeTruthy();
+  expect(response.url).toBeTruthy();
+});
