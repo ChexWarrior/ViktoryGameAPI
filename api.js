@@ -45,8 +45,7 @@ const startGame = async (params) => {
     for (const player of players) await addPlayer(player, page);
 
     await page.click('#Foundation_Elemental_5_PlayButton');
-    await page.waitForSelector('#Foundation_Elemental_8_refreshGame');
-    await page.screenshot({ path: './test2.png' });
+    await page.waitForSelector('#Foundation_Elemental_8_spectatorAnchor');
     url = page.url();
   } finally {
     await browser.close();
