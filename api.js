@@ -23,7 +23,8 @@ const addPlayer = async (player, page) => {
 
 const startGame = async (params) => {
   const startGameUrl = 'http://gamesbyemail.com/Games/Viktory2';
-  const { numPlayers, players, title } = params;
+  const { players, title } = params;
+  const numPlayers = players.length;
   const browser = await puppeteer.launch();
   let url;
 
@@ -47,11 +48,19 @@ const startGame = async (params) => {
     await page.click('#Foundation_Elemental_5_PlayButton');
     await page.waitForSelector('#Foundation_Elemental_8_spectatorAnchor');
     url = page.url();
+  } catch (e) {
+    return {
+      success: false,
+      message: e.message,
+    };
   } finally {
     await browser.close();
   }
 
-  return url;
+  return {
+    success: true,
+    url,
+  };
 };
 
 module.exports = {
