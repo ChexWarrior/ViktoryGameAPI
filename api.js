@@ -34,12 +34,14 @@ const startGame = async (params) => {
 
     if (title) {
       await page.$eval('#Foundation_Elemental_5_GameTitle', (element, gameTitle) => {
+        /* eslint-disable-next-line */
         element.value = gameTitle;
       }, title);
     }
 
     await page.click(`input[name^="Foundation_Elemental_5_numPlayers"][value="${numPlayers}"]`);
 
+    /* eslint-disable-next-line */
     for (const player of players) await addPlayer(player, page);
 
     await page.click('#Foundation_Elemental_5_PlayButton');
