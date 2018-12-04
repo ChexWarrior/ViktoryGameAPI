@@ -5,6 +5,10 @@ const typeValue = async (selector, value, page) => {
   await page.keyboard.type(value);
 };
 
+const clearValue = async (selector, page) => {
+  await page.$eval(selector, el => el.value = '');
+};
+
 const addPlayer = async (player, page) => {
   const {
     name,
@@ -16,7 +20,6 @@ const addPlayer = async (player, page) => {
 
   await page.click(`#Foundation_Elemental_5_PlayerInfo_${order - 1} input`);
   await page.waitForSelector(`#Foundation_Elemental_5_PlayerTitle_${order - 1}`, { visible: true });
-
   await typeValue(`#Foundation_Elemental_5_PlayerTitle_${order - 1}`, combinedName, page);
   await typeValue(`#Foundation_Elemental_5_PlayerId_${order - 1}`, email, page);
 };
@@ -34,10 +37,11 @@ const startGame = async (params) => {
     await page.waitForSelector('#Foundation_Elemental_5_GameTitle');
 
     if (title) {
-      await page.$eval('#Foundation_Elemental_5_GameTitle', (element, gameTitle) => {
-        /* eslint-disable-next-line */
-        element.value = gameTitle;
-      }, title);
+      await clearValue('#Foundation_Elemental_5_GameTitle', page);
+      await typeValue('#Foundation_Elemental_5_GameTitle', title, page);
+      await page.screenshot({
+        'path': './test.png',
+      });
     }
 
     await page.click(`input[name^="Foundation_Elemental_5_numPlayers"][value="${numPlayers}"]`);
