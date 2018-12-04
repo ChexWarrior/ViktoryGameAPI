@@ -4,7 +4,7 @@ const startGameUrl = 'http://gamesbyemail.com/Games/Viktory2';
 const gameTitleInput = '#Foundation_Elemental_5_GameTitle';
 const playerStartBtnPrefix = '#Foundation_Elemental_5_PlayerInfo_';
 const playerTitleInputPrefix = '#Foundation_Elemental_5_PlayerTitle_';
-const playerEmailInputPrefix = '#Foundation_Elemental_5_PlayerId';
+const playerEmailInputPrefix = '#Foundation_Elemental_5_PlayerId_';
 
 const typeValue = async (selector, value, page) => {
   await page.focus(selector);
@@ -54,9 +54,6 @@ const startGame = async (params) => {
     if (title) {
       await clearValue(gameTitleInput, page);
       await typeValue(gameTitleInput, title, page);
-      await page.screenshot({
-        'path': './test.png',
-      });
     }
 
     await page.click(`input[name^="Foundation_Elemental_5_numPlayers"][value="${numPlayers}"]`);
