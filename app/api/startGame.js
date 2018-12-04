@@ -1,5 +1,11 @@
 const puppeteer = require('puppeteer');
 
+const startGameUrl = 'http://gamesbyemail.com/Games/Viktory2';
+const gameTitleInput = '#Foundation_Elemental_5_GameTitle';
+const playerStartBtnPrefix = '#Foundation_Elemental_5_PlayerInfo_';
+const playerTitleInputPrefix = '#Foundation_Elemental_5_PlayerTitle_';
+const playerEmailInputPrefix = '#Foundation_Elemental_5_PlayerId';
+
 const typeValue = async (selector, value, page) => {
   await page.focus(selector);
   await page.keyboard.type(value);
@@ -18,27 +24,36 @@ const addPlayer = async (player, page) => {
   } = player;
   const combinedName = alias ? `${alias} (${name})` : name;
 
-  await page.click(`#Foundation_Elemental_5_PlayerInfo_${order - 1} input`);
-  await page.waitForSelector(`#Foundation_Elemental_5_PlayerTitle_${order - 1}`, { visible: true });
-  await typeValue(`#Foundation_Elemental_5_PlayerTitle_${order - 1}`, combinedName, page);
-  await typeValue(`#Foundation_Elemental_5_PlayerId_${order - 1}`, email, page);
+  await page.click(`${playerStartBtnPrefix}${order - 1} input`);
+  await page.waitForSelector(
+    `${playerTitleInputPrefix}${order - 1}`,
+    { visible: true }
+  );
+
+  await typeValue(
+    `${playerTitleInputPrefix}${order - 1}`,
+    combinedName,
+    page
+  );
+
+  await typeValue(`${playerEmailInputPrefix}${order - 1}`, email, page);
 };
 
 const startGame = async (params) => {
-  const startGameUrl = 'http://gamesbyemail.com/Games/Viktory2';
   const { players, title } = params;
   const numPlayers = players.length;
   const browser = await puppeteer.launch();
+
   let url;
 
   try {
     const page = await browser.newPage();
     await page.goto(startGameUrl);
-    await page.waitForSelector('#Foundation_Elemental_5_GameTitle');
+    await page.waitForSelector(gameTitleInput);
 
     if (title) {
-      await clearValue('#Foundation_Elemental_5_GameTitle', page);
-      await typeValue('#Foundation_Elemental_5_GameTitle', title, page);
+      await clearValue(gameTitleInput, page);
+      await typeValue(gameTitleInput, title, page);
       await page.screenshot({
         'path': './test.png',
       });
