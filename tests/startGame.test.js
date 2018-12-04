@@ -1,19 +1,19 @@
-const api = require('../api.js');
+const api = require('../app/api/api.js');
 
 test('Verify that 2 player game is created', async () => {
   const response = await api.startGame({
-    title: 'Test Game',
+    title: 'Test Game 2',
     players: [
       {
         name: 'Andy',
         alias: 'Ceezy The Great',
         order: 2,
-        email: 'aplehm@gmail.com',
+        email: 'viktory2tester@yahoo.com',
       },
       {
         name: 'Joan',
         order: 1,
-        email: 'aplehm@gmail.com',
+        email: 'al95788n@pace.edu',
       },
     ],
   });

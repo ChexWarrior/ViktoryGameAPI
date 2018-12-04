@@ -10,7 +10,6 @@ app.post('/start', async (request, response) => {
   /**
    * Parameters
    * title
-   * numPlayers: 2 - 8
    * players: [
    *  {alias, name, email, order} ...
    * ]
