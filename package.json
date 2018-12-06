@@ -1,8 +1,12 @@
 {
   "name": "viktorygameapi",
   "version": "1.0.0",
-  "description": "",
+  "description": "API for working with Viktory II game on GamesByEmail.com",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChexWarrior/ViktoryGameAPI"
+  },
   "scripts": {
     "test": "jest"
   },
