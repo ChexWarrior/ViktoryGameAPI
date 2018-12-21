@@ -1,0 +1,4 @@
+{
+  "globalSetup": "./tests/setup/jest-setup.js",
+  "globalTeardown": "./tests/setup/jest-teardown.js"
+}
